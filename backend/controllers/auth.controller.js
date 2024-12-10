@@ -1,22 +1,14 @@
-const UserService = require("../services/authService");
-const UserServiceInstance = new UserService();
+const AuthService = require("../services/auth.service");
+const AuthServiceInstance = new AuthService();
 
-const postRegister = async (req, res) => {
+const postSignup = async (req, res) => {
   try {
-    const result = await UserServiceInstance.register(req.body);
-    res.json(result);
+    const newUser = await AuthServiceInstance.create(req.body);
+    res.status(201).send(newUser);
   } catch (error) {
-    if (error.code === 11000) {
-      res.status(409).json({
-        message: "Failed to create new user",
-        reason: "Already Exists in DB",
-      });
-    } else {
-      res.status(500).json({ message: "Failed to create new user", error });
-    }
+    res.status(400).send({ message: error.message });
   }
 };
 
 
-
-module.exports = { postRegister, };
+module.exports = { postSignup, };
