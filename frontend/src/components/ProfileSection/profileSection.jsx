@@ -1,8 +1,24 @@
+import { useEffect, useState } from "react";
 import coverPh from "../../assets/cover-ph.webp";
 import Navbar from "../Navbar/navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProfileSection = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedIsLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    setIsLoggedIn(storedIsLoggedIn);
+  }, []);
+
+  const handleCompleteProfile = () => {
+    // Navigate to the profile setup page if logged in
+    if (isLoggedIn) {
+      navigate("/profile-setup");
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -55,12 +71,22 @@ const ProfileSection = () => {
             with others for mentorship opportunities.
           </p>
           <div className="mt-4">
-            {/* Link wraps the button */}
-            <Link to="/register">
-              <button type="button" className="btn btn-outline-success btn-lg">
-                Register Yourself
+            {/* Conditionally render button */}
+            {!isLoggedIn ? (
+              <Link to="/register">
+                <button type="button" className="btn btn-outline-success btn-lg">
+                  Register Yourself
+                </button>
+              </Link>
+            ) : (
+              <button
+                type="button"
+                className="btn btn-outline-success btn-lg"
+                onClick={handleCompleteProfile}
+              >
+                Complete Your Profile
               </button>
-            </Link>
+            )}
           </div>
         </div>
 
