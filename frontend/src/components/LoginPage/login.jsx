@@ -1,12 +1,34 @@
 import React from "react";
 import loginPic from "../../assets/login-cover.jpg";
+import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   return (
     <div
       className="container-fluid d-flex flex-wrap align-items-center"
-      style={{ minHeight: "100vh", padding: "0", margin: "0" }}
+      style={{
+        minHeight: "100vh",
+        padding: "0",
+        margin: "0",
+        position: "relative",
+      }}
     >
+      {/* Back to Home Link */}
+      <Link
+        to="/"
+        style={{
+          position: "absolute",
+          top: "1rem",
+          right: "1rem",
+          color: "#007bff",
+          textDecoration: "none",
+          fontWeight: "bold",
+          fontSize: "1rem",
+        }}
+      >
+        &larr; Back to Home
+      </Link>
+
       {/* Left Side: Image */}
       <div
         style={{
@@ -72,8 +94,11 @@ const LoginPage = () => {
 
         {/* Register Link */}
         <p style={{ color: "#555" }}>
-          Not registered?
-          <a href="/register" style={{ color: "#007bff", textDecoration: "none" }}>
+          Not registered?{" "}
+          <a
+            href="/register"
+            style={{ color: "#007bff", textDecoration: "none" }}
+          >
             Register now
           </a>
         </p>
