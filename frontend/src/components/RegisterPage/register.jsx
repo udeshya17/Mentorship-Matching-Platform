@@ -29,7 +29,7 @@ const RegisterPage = () => {
     if (validateInput(formData)) {
       try {
         setLoading(true);
-        await axios.post(`${config.endpoint}/auth/register`, {
+        await axios.post(`${config.endpoint}/auth/signup`, {
           username: formData.username,
           email: formData.email,
           password: formData.password,
