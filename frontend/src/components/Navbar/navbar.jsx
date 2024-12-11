@@ -73,6 +73,11 @@ const Navbar = () => {
                 User Discovery
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link me-3" to="/Matchmaking">
+                Matchmaking
+              </Link>
+            </li>
           </ul>
           {/* Login/Logout and Register Buttons */}
           <div className="d-flex justify-content-end">

@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import coverPh from "../../assets/cover-ph.webp";
 import Navbar from "../Navbar/navbar";
 import { Link, useNavigate } from "react-router-dom";
+import Profile from "../Profile/profile";
 
-const ProfileSection = () => {
+const HomePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
@@ -56,7 +57,7 @@ const ProfileSection = () => {
               marginBottom: "1.5rem",
             }}
           >
-            Mentor Matching Platform
+            Mentorship Matching Platform
           </h2>
           <p
             style={{
@@ -111,8 +112,9 @@ const ProfileSection = () => {
           />
         </div>
       </div>
+      {(isLoggedIn) ? <Profile /> : null}
     </>
   );
 };
 
-export default ProfileSection;
+export default HomePage;
