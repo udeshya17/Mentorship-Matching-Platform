@@ -79,7 +79,7 @@ const ProfileModal = ({ showModal, handleClose, profileDetails, handleSave }) =>
               name="role"
               value={formData.role}
               onChange={handleChange}
-              placeholder="Enter role"
+              placeholder="Enter role (mentor or mentee)"
             />
           </Form.Group>
 
