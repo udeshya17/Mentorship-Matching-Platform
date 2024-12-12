@@ -8,3 +8,4 @@ const validateSchema = (schema) => (req, res, next) => {
 };
 
 module.exports = { validateSchema };
+

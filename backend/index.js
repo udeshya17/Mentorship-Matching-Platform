@@ -3,10 +3,12 @@ require('dotenv').config();
 const connectDB = require("./db/config");
 const cors = require("cors");
 const authRoutes = require("./routes/auth.route");
+const profileRoutes = require("./routes/profile.route");
 
 const app = express();
 const PORT = process.env.PORT;
 
+// cors policy error handling
 app.use(
     cors({
       origin: [
@@ -21,7 +23,10 @@ app.use(
 connectDB();
 
 app.use(express.json());
+
+// routes
 app.use("/auth", authRoutes);
+app.use('/api', profileRoutes);
 
 app.listen(PORT, ()=>{
     console.log(`Backend is listening at ${PORT}`);

@@ -33,13 +33,13 @@ const LoginPage = () => {
           password: formData.password,
         });
 
-        const { isLoggedIn, username } = response.data;
+        const { isLoggedIn, username, userId } = response.data;
 
         if (isLoggedIn) {
           enqueueSnackbar("Login Successful", { variant: "success" });
 
           // Store user details in localStorage
-
+          localStorage.setItem("userId", userId)
           localStorage.setItem("isLoggedIn", "true");
           localStorage.setItem("username", username);
 
@@ -56,6 +56,7 @@ const LoginPage = () => {
           });
 
           // Redirect to profile page (or dashboard)
+          
           navigate("/");
         } else {
           enqueueSnackbar("Invalid login credentials", { variant: "error" });
