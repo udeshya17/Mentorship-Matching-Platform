@@ -7,6 +7,7 @@ import { config } from "../../App";
 
 const ProfileModal = ({ showModal, handleClose, profileDetails, handleSave }) => {
   const [formData, setFormData] = useState(profileDetails);
+  const [isUpdating, setIsUpdating] = useState(false); 
 
   // Update form data when profileDetails props change
   useEffect(() => {
@@ -30,25 +31,38 @@ const ProfileModal = ({ showModal, handleClose, profileDetails, handleSave }) =>
     }
   };
 
-  const storedUserId = localStorage.getItem("userId");
-
   const handleSubmit = async () => {
-    const { _id, ...profileData } = formData; // Exclude `_id` before sending data
-    profileData.userId = storedUserId;
-
+    setIsUpdating(true);
+  
+    const userId = localStorage.getItem("userId");
+  
+    // Exclude _id and __v from the form data
+    const { _id, __v, ...profileData } = { ...formData, userId };
+  
     try {
-      const response = await axios.post(`${config.endpoint}/api/profile`, profileData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      // Update profile API call
+      const response = await axios.put(
+        `${config.endpoint}/api/profile/${userId}`,
+        profileData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       console.log("Profile updated:", response.data);
-      console.log(formData);
-      handleSave(formData); // Save updated data in parent component
+  
+      // Save updated data in the parent component
+      handleSave(response.data);
     } catch (error) {
-      console.error("Error submitting profile data:", error.response?.data || error.message);
+      console.error(
+        "Error updating profile data:",
+        error.response?.data || error.message
+      );
+    } finally {
+      setIsUpdating(false);
     }
   };
+  
+  
 
   return (
     <Modal show={showModal} onHide={handleClose}>
@@ -105,11 +119,11 @@ const ProfileModal = ({ showModal, handleClose, profileDetails, handleSave }) =>
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button variant="secondary" onClick={handleClose} disabled={isUpdating}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleSubmit}>
-          Save Changes
+        <Button variant="primary" onClick={handleSubmit} disabled={isUpdating}>
+          {isUpdating ? "Saving..." : "Save Changes"}
         </Button>
       </Modal.Footer>
     </Modal>

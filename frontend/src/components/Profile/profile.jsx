@@ -24,7 +24,7 @@ const Profile = () => {
 
   // Handle saving profile details from the modal
   const handleSave = (updatedDetails) => {
-    setProfileDetails(updatedDetails); // Update the profile details in the parent component
+    setProfileDetails(updatedDetails); 
     handleClose(); // Close the modal
   };
 
