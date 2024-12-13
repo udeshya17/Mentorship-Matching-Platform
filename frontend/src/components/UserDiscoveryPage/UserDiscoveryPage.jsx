@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import UserCard from "../Card/userCard"; // Ensure this component exists
+import UserCard from "../Card/userCard"; 
 import { Row, Col, Button, Container, Dropdown, Badge } from "react-bootstrap";
 import { config } from "../../App";
 import Carousel from "react-multi-carousel";
@@ -45,15 +45,21 @@ const UserDiscoveryPage = () => {
       let filtered = [...users];
 
       if (filters.role) {
-        filtered = filtered.filter((user) => user.role === filters.role);
+        filtered = filtered.filter((user) =>
+          user.role.toLowerCase() === filters.role.toLowerCase()
+        );
       }
 
       if (filters.skills) {
-        filtered = filtered.filter((user) => user.skills.includes(filters.skills));
+        filtered = filtered.filter((user) =>
+          user.skills.some((skill) => skill.toLowerCase().includes(filters.skills.toLowerCase()))
+        );
       }
 
       if (filters.interests) {
-        filtered = filtered.filter((user) => user.interests.includes(filters.interests));
+        filtered = filtered.filter((user) =>
+          user.interests.some((interest) => interest.toLowerCase().includes(filters.interests.toLowerCase()))
+        );
       }
 
       setFilteredUsers(filtered);
@@ -155,7 +161,10 @@ const UserDiscoveryPage = () => {
           </div>
         </>
       ) : (
-        <p className="text-center">No users available</p>
+        <div className="text-center">
+          <p>No users available</p>
+          <span style={{ fontSize: "100px" }}>😞</span>
+        </div>
       )}
     </Container>
   );

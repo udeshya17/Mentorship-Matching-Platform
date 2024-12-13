@@ -54,5 +54,5 @@ module.exports = {
   getProfile,
   createProfile,
   updateProfile,
-  getAllUsers, // Export the new method
+  getAllUsers, 
 };
