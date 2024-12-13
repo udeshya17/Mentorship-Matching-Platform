@@ -1,13 +1,15 @@
-const notificationService = require('../services/notification.service');
+const { createMentorshipRequestNotification } = require('../services/notification.service');
 
-const getUserNotifications = async (req, res) => {
+const createNotification = async (req, res) => {
+  const { userId, senderId } = req.body;
+
   try {
-    const userId = req.user.id;
-    const notifications = await notificationService.getNotifications(userId);
-    res.json(notifications);
+    // Call the service to create the notification
+    await createMentorshipRequestNotification(userId, senderId);
+    res.status(201).json({ message: 'Notification created successfully' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Error creating notification' });
   }
 };
 
-module.exports = { getUserNotifications };
+module.exports = { createNotification };

@@ -1,9 +1,9 @@
 const express = require('express');
-const { getUserNotifications } = require('../controllers/notification.controller');
-const authMiddleware = require('../middlewares/auth.middleware');
+const { createNotification } = require('../controllers/notification.controller');
 
 const router = express.Router();
 
-router.get('/notifications', authMiddleware, getUserNotifications);
+// Route to create a new mentorship request notification
+router.post('/notifications', createNotification);
 
 module.exports = router;

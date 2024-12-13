@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Profile from "../Profile/profile";
 import UserDiscoveryPage from "../UserDiscoveryPage/UserDiscoveryPage";
 import MatchmakingPage from "../MatchMakingPage/MatchMaking";
+import Notifications from "../Notifications/Notifications";
 
 const HomePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -120,7 +121,8 @@ const HomePage = () => {
         <>
           <Profile />
           <UserDiscoveryPage />
-          <MatchmakingPage />
+          <MatchmakingPage /> 
+          <Notifications />
         </>
       )}
     </>

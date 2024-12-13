@@ -1,14 +1,17 @@
-const Notification = require('../models/notification.model');
+const Notification = require('../models/notification.model'); 
 
-const createNotification = async (userId, message) => {
-  const notification = new Notification({ userId, message });
-  await notification.save();
+const createMentorshipRequestNotification = async (userId, senderId) => {
+  try {
+    const message = `You have a new mentorship request from ${senderId}`;
+    const notification = new Notification({
+      userId: userId,
+      message: message,
+      read: false,
+    });
 
-  return notification;
+    await notification.save();
+    console.log('Notification created:', notification);
+  } catch (error) {
+    console.error('Error creating notification:', error);  // Detailed error logging
+  }
 };
-
-const getNotifications = async (userId) => {
-  return await Notification.find({ userId });
-};
-
-module.exports = { createNotification, getNotifications };
