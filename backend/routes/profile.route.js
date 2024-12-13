@@ -6,6 +6,12 @@ const profileController = require('../controllers/profile.controller');
 const router = express.Router();
 
 /**
+ * Route to get all users' profiles
+ * GET /profile/users
+ */
+router.get('/profile/users', profileController.getAllUsers);
+
+/**
  * Route to get the profile data by userId
  * GET /profile/:userId
  */

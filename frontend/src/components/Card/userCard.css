@@ -1,0 +1,78 @@
+.user-card {
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    background-color: #fff;
+    overflow: hidden;
+  }
+  
+  /* Hover effect for the card */
+  .user-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+  }
+  
+  /* Profile image style */
+  .user-card .card-img-top {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
+  }
+  
+  /* Title (User Name) */
+  .user-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Subtitle (User Role) */
+  .user-role {
+    font-size: 1.2rem;
+    color: #777;
+    margin-bottom: 10px;
+  }
+  
+  /* Bio style */
+  .user-bio {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  
+  /* Skills and Interests section */
+  .user-skills, .user-interests {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  .user-skills strong, .user-interests strong {
+    color: #007bff;
+  }
+  
+  /* Footer with View Profile button */
+  .user-footer {
+    background-color: #f8f9fa;
+    padding: 10px;
+    text-align: center;
+    border-top: 1px solid #eee;
+  }
+  
+  .view-profile-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .view-profile-btn:hover {
+    background-color: #0056b3;
+  }
+  

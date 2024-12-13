@@ -1,6 +1,6 @@
 const profileService = require('../services/profile.service');
 
-// Controller to get profile data
+// Controller to get profile data by userId
 const getProfile = async (req, res) => {
   try {
     const profile = await profileService.getProfileByUserId(req.params.userId);
@@ -37,8 +37,22 @@ const updateProfile = async (req, res) => {
   }
 };
 
+// Controller to get all user profiles
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await profileService.getAllUsers(); // Call the service to get all users
+    if (users.length === 0) {
+      return res.status(404).json({ message: 'No users found' });
+    }
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching users', error: error.message });
+  }
+};
+
 module.exports = {
   getProfile,
   createProfile,
   updateProfile,
+  getAllUsers, // Export the new method
 };

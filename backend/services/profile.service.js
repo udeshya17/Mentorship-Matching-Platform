@@ -33,6 +33,15 @@ const updateProfile = async (userId, profileData) => {
   return await existingProfile.save();
 };
 
+// Fetch all user profiles
+const getAllUsers = async () => {
+  try {
+    return await Profile.find(); // Fetch all profiles
+  } catch (error) {
+    throw new Error('Error fetching all users: ' + error.message);
+  }
+};
+
 // Handle no matches found gracefully
 const handleNoMatchesFound = (criteria) => {
   return {
@@ -41,9 +50,33 @@ const handleNoMatchesFound = (criteria) => {
   };
 };
 
+// Method for filtering users by role, skills, and interests
+const filterUsers = async (filters) => {
+  try {
+    const { role, skills, interests } = filters;
+
+    // Build the filter query object
+    const filterQuery = {};
+    if (role) filterQuery.role = role;
+    if (skills) filterQuery.skills = { $in: skills };
+    if (interests) filterQuery.interests = { $in: interests };
+
+    // Fetch filtered users based on criteria
+    const users = await Profile.find(filterQuery);
+    if (users.length === 0) {
+      return handleNoMatchesFound(JSON.stringify(filters));
+    }
+    return users;
+  } catch (error) {
+    throw new Error('Error filtering users: ' + error.message);
+  }
+};
+
 module.exports = {
   getProfileByUserId,
   createProfile,
   updateProfile,
+  getAllUsers,
   handleNoMatchesFound,
+  filterUsers, 
 };

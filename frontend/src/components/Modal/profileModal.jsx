@@ -5,13 +5,21 @@ import Form from "react-bootstrap/Form";
 import axios from "axios";
 import { config } from "../../App";
 
-const ProfileModal = ({ showModal, handleClose, profileDetails, handleSave }) => {
-  const [formData, setFormData] = useState(profileDetails);
-  const [isUpdating, setIsUpdating] = useState(false); 
+const ProfileModal = ({ showModal, handleClose, profileDetails = {}, handleSave }) => {
+  const defaultProfile = {
+    role: "",
+    skills: [],
+    interests: [],
+    bio: "",
+  };
+
+  const [formData, setFormData] = useState({ ...defaultProfile, ...profileDetails });
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   // Update form data when profileDetails props change
   useEffect(() => {
-    setFormData(profileDetails);
+    setFormData({ ...defaultProfile, ...profileDetails });
   }, [profileDetails]);
 
   const handleChange = (e) => {
@@ -21,7 +29,7 @@ const ProfileModal = ({ showModal, handleClose, profileDetails, handleSave }) =>
     if (name === "skills" || name === "interests") {
       setFormData((prevState) => ({
         ...prevState,
-        [name]: value.split(",").map((item) => item.trim()),
+        [name]: value ? value.split(",").map((item) => item.trim()) : [],
       }));
     } else {
       setFormData((prevState) => ({
@@ -33,35 +41,70 @@ const ProfileModal = ({ showModal, handleClose, profileDetails, handleSave }) =>
 
   const handleSubmit = async () => {
     setIsUpdating(true);
+    setErrorMessage("");
   
     const userId = localStorage.getItem("userId");
   
-    // Exclude _id and __v from the form data
+    // Exclude `_id` and `__v` from the form data
     const { _id, __v, ...profileData } = { ...formData, userId };
   
     try {
-      // Update profile API call
-      const response = await axios.put(
-        `${config.endpoint}/api/profile/${userId}`,
-        profileData,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
+      // Check if the profile exists
+      const checkProfileResponse = await axios.get(
+        `${config.endpoint}/api/profile/${userId}`
       );
-      console.log("Profile updated:", response.data);
   
-      // Save updated data in the parent component
-      handleSave(response.data);
+      if (checkProfileResponse.data) {
+        // Profile exists, proceed with the PUT request
+        const updateResponse = await axios.put(
+          `${config.endpoint}/api/profile/${userId}`,
+          profileData,
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        console.log("Profile updated:", updateResponse.data);
+        handleSave(updateResponse.data);
+      }
     } catch (error) {
-      console.error(
-        "Error updating profile data:",
-        error.response?.data || error.message
-      );
+      // Handle case where profile does not exist (404)
+      if (error.response?.status === 404) {
+        try {
+          // Profile doesn't exist, proceed with the POST request
+          const createResponse = await axios.post(
+            `${config.endpoint}/api/profile`,
+            profileData,
+            {
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+          console.log("Profile created:", createResponse.data);
+          handleSave(createResponse.data);
+        } catch (createError) {
+          console.error(
+            "Error creating profile:",
+            createError.response?.data || createError.message
+          );
+          setErrorMessage(
+            createError.response?.data?.message ||
+              "Failed to create profile. Please try again."
+          );
+        }
+      } else {
+        console.error(
+          "Error checking profile existence:",
+          error.response?.data || error.message
+        );
+        setErrorMessage(
+          error.response?.data?.message ||
+            "Failed to update profile. Please try again."
+        );
+      }
     } finally {
       setIsUpdating(false);
+      handleClose(); // Close modal in either case
     }
   };
-  
   
 
   return (
@@ -115,6 +158,8 @@ const ProfileModal = ({ showModal, handleClose, profileDetails, handleSave }) =>
               placeholder="Enter bio"
             />
           </Form.Group>
+
+          {errorMessage && <p className="text-danger">{errorMessage}</p>}
         </Form>
       </Modal.Body>
 

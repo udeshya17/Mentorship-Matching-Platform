@@ -3,6 +3,7 @@ import coverPh from "../../assets/cover-ph.webp";
 import Navbar from "../Navbar/navbar";
 import { Link, useNavigate } from "react-router-dom";
 import Profile from "../Profile/profile";
+import UserDiscoveryPage from "../UserDiscoveryPage/UserDiscoveryPage";
 
 const HomePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -112,7 +113,14 @@ const HomePage = () => {
           />
         </div>
       </div>
-      {(isLoggedIn) ? <Profile /> : null}
+
+      {/* Conditionally render Profile and UserDiscoveryPage */}
+      {isLoggedIn && (
+        <>
+          <Profile />
+          <UserDiscoveryPage />
+        </>
+      )}
     </>
   );
 };
