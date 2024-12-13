@@ -23,6 +23,7 @@ const UserDiscoveryPage = () => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get(`${config.endpoint}/api/profile/users`);
+        console.log(response.data);
         if (Array.isArray(response.data)) {
           setUsers(response.data);
           setFilteredUsers(response.data);
