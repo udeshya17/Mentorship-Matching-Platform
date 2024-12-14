@@ -4,8 +4,8 @@ import Navbar from "../Navbar/navbar";
 import { Link, useNavigate } from "react-router-dom";
 import Profile from "../Profile/profile";
 import UserDiscoveryPage from "../UserDiscoveryPage/UserDiscoveryPage";
-import MatchmakingPage from "../MatchMakingPage/MatchMaking";
-import Notifications from "../Notifications/Notifications";
+import MatchResultPage from "../MatchResultPage/MatchResultPage";
+
 
 const HomePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -121,8 +121,7 @@ const HomePage = () => {
         <>
           <Profile />
           <UserDiscoveryPage />
-          <MatchmakingPage /> 
-          <Notifications />
+          <MatchResultPage />
         </>
       )}
     </>

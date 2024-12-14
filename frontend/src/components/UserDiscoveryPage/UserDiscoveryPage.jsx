@@ -1,18 +1,16 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import UserCard from "../Card/userCard";
+import UserCard from "../Card/userCard"; // Ensure this component exists
 import { Row, Col, Button, Container, Dropdown, Badge } from "react-bootstrap";
 import { config } from "../../App";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { useSnackbar } from "notistack";  // Importing notistack
 
 const UserDiscoveryPage = () => {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [showMore, setShowMore] = useState(false);
   const [filters, setFilters] = useState({ role: "", skills: "", interests: "" });
-  const { enqueueSnackbar } = useSnackbar();  // Initializing notistack
 
   const responsive = {
     superLargeDesktop: { breakpoint: { max: 4000, min: 1024 }, items: 4 },
@@ -25,7 +23,6 @@ const UserDiscoveryPage = () => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get(`${config.endpoint}/api/profile/users`);
-        console.log(response.data);
         if (Array.isArray(response.data)) {
           setUsers(response.data);
           setFilteredUsers(response.data);
@@ -48,21 +45,15 @@ const UserDiscoveryPage = () => {
       let filtered = [...users];
 
       if (filters.role) {
-        filtered = filtered.filter((user) =>
-          user.role.toLowerCase() === filters.role.toLowerCase()
-        );
+        filtered = filtered.filter((user) => user.role === filters.role);
       }
 
       if (filters.skills) {
-        filtered = filtered.filter((user) =>
-          user.skills.some((skill) => skill.toLowerCase().includes(filters.skills.toLowerCase()))
-        );
+        filtered = filtered.filter((user) => user.skills.includes(filters.skills));
       }
 
       if (filters.interests) {
-        filtered = filtered.filter((user) =>
-          user.interests.some((interest) => interest.toLowerCase().includes(filters.interests.toLowerCase()))
-        );
+        filtered = filtered.filter((user) => user.interests.includes(filters.interests));
       }
 
       setFilteredUsers(filtered);
@@ -73,31 +64,6 @@ const UserDiscoveryPage = () => {
 
   const removeFilter = (key) => {
     setFilters((prev) => ({ ...prev, [key]: "" }));
-  };
-
-  // Handle send request functionality
-  const sendRequest = async (mentorId) => {
-    const menteeId = localStorage.getItem("userId");
-
-    // If the menteeId is missing, show an error and return
-    if (!menteeId) {
-      enqueueSnackbar("Authentication required. Please log in!", { variant: "error" });
-      return;
-    }
-
-    console.log(menteeId, mentorId);
-
-    try {
-      const response = await axios.post(
-        `${config.endpoint}/api/mentorship/request`,
-        { menteeId, mentorId }
-      );
-      console.log("Request sent:", response.data);
-      enqueueSnackbar("Mentorship request sent successfully!", { variant: "success" });
-    } catch (error) {
-      console.error("Error sending request:", error);
-      enqueueSnackbar("Error sending mentorship request!", { variant: "error" });
-    }
   };
 
   return (
@@ -111,6 +77,7 @@ const UserDiscoveryPage = () => {
             <Dropdown.Toggle variant="primary" id="dropdown-role">
               Role
             </Dropdown.Toggle>
+
             <Dropdown.Menu>
               <Dropdown.Item eventKey="mentor">Mentor</Dropdown.Item>
               <Dropdown.Item eventKey="mentee">Mentee</Dropdown.Item>
@@ -121,6 +88,7 @@ const UserDiscoveryPage = () => {
             <Dropdown.Toggle variant="primary" id="dropdown-skills">
               Skills
             </Dropdown.Toggle>
+
             <Dropdown.Menu>
               <Dropdown.Item eventKey="JavaScript">JavaScript</Dropdown.Item>
               <Dropdown.Item eventKey="React">React</Dropdown.Item>
@@ -132,6 +100,7 @@ const UserDiscoveryPage = () => {
             <Dropdown.Toggle variant="primary" id="dropdown-interests">
               Interests
             </Dropdown.Toggle>
+
             <Dropdown.Menu>
               <Dropdown.Item eventKey="Coding">Coding</Dropdown.Item>
               <Dropdown.Item eventKey="Design">Design</Dropdown.Item>
@@ -166,16 +135,6 @@ const UserDiscoveryPage = () => {
               {filteredUsers.map((user) => (
                 <div key={user._id} style={{ padding: "0 10px" }}>
                   <UserCard user={user} />
-                  {/* Show the "Send Request" button only if the user's role is different */}
-                  {user.role !== localStorage.getItem("role") && (
-                    <Button
-                      variant="success"
-                      onClick={() => sendRequest(user._id)}
-                      style={{ marginTop: "10px" }}
-                    >
-                      Send Request
-                    </Button>
-                  )}
                 </div>
               ))}
             </Carousel>
@@ -184,16 +143,6 @@ const UserDiscoveryPage = () => {
               {filteredUsers.map((user) => (
                 <Col key={user._id} sm={12} md={6} lg={4} xl={3}>
                   <UserCard user={user} />
-                  {/* Show the "Send Request" button only if the user's role is different */}
-                  {user.role !== localStorage.getItem("role") && (
-                    <Button
-                      variant="success"
-                      onClick={() => sendRequest(user._id)}
-                      style={{ marginTop: "10px" }}
-                    >
-                      Send Request
-                    </Button>
-                  )}
                 </Col>
               ))}
             </Row>
@@ -206,10 +155,7 @@ const UserDiscoveryPage = () => {
           </div>
         </>
       ) : (
-        <div className="text-center">
-          <p>No users available</p>
-          <span style={{ fontSize: "100px" }}>😞</span>
-        </div>
+        <p className="text-center">No users available</p>
       )}
     </Container>
   );

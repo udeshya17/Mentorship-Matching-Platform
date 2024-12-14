@@ -3,8 +3,17 @@ const notificationService = require('../services/notification.service');
 
 const getMatchSuggestions = async (req, res) => {
   try {
-    const userId = req.user.id;
+    // Extract `userId` dynamically from query params or request body
+    const userId = req.query.userId || req.body.userId;
+
+    // If `userId` is not provided, return an error
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required' });
+    }
+
+    // Fetch matching profiles using the userId
     const matches = await mentorshipService.getMatchingProfiles(userId);
+
     res.json(matches);
   } catch (error) {
     res.status(500).json({ message: error.message });
