@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import coverPhoto from "../../assets/profile-ph.jpg";
-import ProfileModal from "../Modal/ProfileModal";
+import ProfileModal from "../Modal/profileModal";
 import axios from "axios";
 import { config } from "../../App";
 
