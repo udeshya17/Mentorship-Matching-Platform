@@ -1,8 +1,7 @@
 const Notification = require('../models/notification.model'); 
 
-const createMentorshipRequestNotification = async (userId, senderId) => {
+const createNotification = async (userId, message) => {
   try {
-    const message = `You have a new mentorship request from ${senderId}`;
     const notification = new Notification({
       userId: userId,
       message: message,
@@ -12,6 +11,9 @@ const createMentorshipRequestNotification = async (userId, senderId) => {
     await notification.save();
     console.log('Notification created:', notification);
   } catch (error) {
-    console.error('Error creating notification:', error);  // Detailed error logging
+    console.error('Error creating notification:', error);
+    throw new Error('Error creating notification');
   }
 };
+
+module.exports = { createNotification };

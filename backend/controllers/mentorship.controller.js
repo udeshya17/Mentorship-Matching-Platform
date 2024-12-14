@@ -24,15 +24,16 @@ const sendMentorshipRequest = async (req, res) => {
   try {
     const { menteeId, mentorId } = req.body;
     const request = await mentorshipService.sendMentorshipRequest(menteeId, mentorId);
-
-    // Notify the mentor
-    await notificationService.createNotification(mentorId, `You have a new mentorship request from ${menteeId}`);
-
+    
+    // Manually log the notification
+    console.log(`Notification: You have a new mentorship request from ${menteeId}`);
+    
     res.json(request);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
+
 
 const updateRequestStatus = async (req, res) => {
   try {
