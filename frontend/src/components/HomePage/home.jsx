@@ -1,28 +1,18 @@
 import { useEffect, useState } from "react";
 import coverPh from "../../assets/cover-ph.webp";
 import Navbar from "../Navbar/navbar";
-import { Link, useNavigate } from "react-router-dom";
 import Profile from "../Profile/profile";
 import UserDiscoveryPage from "../UserDiscoveryPage/UserDiscoveryPage";
 import MatchResultPage from "../MatchResultPage/MatchResultPage";
-import Notification from "../Notifications/Notifications"
-
+import Notification from "../Notifications/Notifications";
 
 const HomePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const storedIsLoggedIn = localStorage.getItem("isLoggedIn") === "true";
     setIsLoggedIn(storedIsLoggedIn);
   }, []);
-
-  const handleCompleteProfile = () => {
-    // Navigate to the profile setup page if logged in
-    if (isLoggedIn) {
-      navigate("/profile-setup");
-    }
-  };
 
   return (
     <>
@@ -36,6 +26,7 @@ const HomePage = () => {
           margin: "0",
           paddingTop: "80px",
         }}
+        id="home"
       >
         {/* Left Content */}
         <div
@@ -75,24 +66,6 @@ const HomePage = () => {
             mentee, specify their skills or areas of interest, and find matches
             with others for mentorship opportunities.
           </p>
-          <div className="mt-4">
-            {/* Conditionally render button */}
-            {!isLoggedIn ? (
-              <Link to="/register">
-                <button type="button" className="btn btn-outline-success btn-lg">
-                  Register Yourself
-                </button>
-              </Link>
-            ) : (
-              <button
-                type="button"
-                className="btn btn-outline-success btn-lg"
-                onClick={handleCompleteProfile}
-              >
-                Complete Your Profile
-              </button>
-            )}
-          </div>
         </div>
 
         {/* Right Image */}
@@ -120,9 +93,9 @@ const HomePage = () => {
       {/* Conditionally render Profile and UserDiscoveryPage */}
       {isLoggedIn && (
         <>
-          <Profile />
-          <UserDiscoveryPage />
-          <MatchResultPage />
+          <Profile id="profile-setup" />
+          <UserDiscoveryPage id="user-discovery" />
+          <MatchResultPage id="matchmaking" />
           <Notification />
         </>
       )}
