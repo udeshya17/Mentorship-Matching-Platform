@@ -158,9 +158,13 @@ ________________________________________________________________________________
 
 - Set Up Profile: Once logged in, set up your profile as a mentor or mentee.
 
+- Refresh the page
+
 - Browse Mentorship Opportunities: Search for available mentors/mentees based on your interests.
 
 - Send/Accept Mentorship Requests: Send requests to mentors or accept requests from mentees.
+
+- Refresh the page
 
 - View Notifications: Stay updated with your mentorship requests and other notifications.
 Conclusion
