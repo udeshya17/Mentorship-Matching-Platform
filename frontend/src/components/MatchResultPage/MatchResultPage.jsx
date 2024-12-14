@@ -1,80 +1,89 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSnackbar } from "notistack"; // Importing notistack
-import { config } from "../../App"; // Assuming your endpoint config is here
+import { useSnackbar } from "notistack";
+import { config } from "../../App";
 
 const MatchResultsPage = () => {
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [buttonState, setButtonState] = useState({}); // To manage the button state
-  const { enqueueSnackbar } = useSnackbar(); // Accessing the enqueueSnackbar function
+  const [buttonState, setButtonState] = useState(() => {
+    const storedState = localStorage.getItem("buttonState");
+    return storedState ? JSON.parse(storedState) : {};
+  });
+
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchMatches = async () => {
       try {
-        // Fetch userId from localStorage
         const userId = localStorage.getItem("userId");
-        console.log("UserID fetched from localStorage:", userId);
-
         if (!userId) {
           throw new Error("UserID not found in localStorage");
         }
 
-        // Make API call with userId
         const response = await axios.get(`${config.endpoint}/api/mentorship/match`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Add token if required
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
           },
-          params: { userId }, // Pass userId as a query parameter
+          params: { userId },
         });
 
         setMatches(response.data);
       } catch (error) {
         console.error("Failed to fetch matches:", error);
+        enqueueSnackbar("Failed to load matches. Please try again later.", { variant: "error" });
       } finally {
         setLoading(false);
       }
     };
 
     fetchMatches();
-  }, []);
+  }, [enqueueSnackbar]);
 
   const handleSendRequest = async (mentorId) => {
     try {
-      const menteeId = localStorage.getItem("userId"); // Assuming userId is stored in localStorage as mentee's ID
+      const menteeId = localStorage.getItem("userId");
       if (!menteeId) {
         throw new Error("UserID not found in localStorage");
       }
 
+      // Send mentorship request
       const response = await axios.post(
         `${config.endpoint}/api/mentorship/request`,
         { menteeId, mentorId, status: "pending" },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Add token if required
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
           },
         }
       );
 
-      if (response.status === 200) {
-        // Show success notification using notistack
-        enqueueSnackbar("Mentorship request sent successfully!", {
-          variant: "success",
-        });
+      if (response.status === 201 || response.status === 200) {
+        enqueueSnackbar("Mentorship request sent successfully!", { variant: "success" });
 
-        // Update the button state to show success message
-        setButtonState((prevState) => ({
-          ...prevState,
-          [mentorId]: "Request Sent Successfully", // Set the success message for the clicked mentorId
-        }));
+        // Update button state to "Sent Successfully"
+        const updatedState = {
+          ...buttonState,
+          [mentorId]: "Sent Successfully",
+        };
+        setButtonState(updatedState);
+        localStorage.setItem("buttonState", JSON.stringify(updatedState));
+
+        // Send notification
+        await axios.post(`${config.endpoint}/api/notifications`, {
+          userId: mentorId,
+          senderId: menteeId,
+          message: `You have a new mentorship request from ${menteeId}`,
+        });
       }
     } catch (error) {
       console.error("Error sending request:", error);
-
-      // Show error notification using notistack
-      enqueueSnackbar("Failed to send mentorship request.", { variant: "error" });
+      enqueueSnackbar(
+        error.response?.data?.message || "Failed to send mentorship request. Please try again.",
+        { variant: "error" }
+      );
     }
   };
 
@@ -98,13 +107,16 @@ const MatchResultsPage = () => {
                   <strong>Match Score:</strong> {match.matchScore}
                 </p>
 
-                {/* Button state handling */}
                 <button
-                  className={`btn ${buttonState[match.match._id] ? "btn-success" : "btn-primary"}`}
-                  onClick={() => handleSendRequest(match.match._id)} // Send request to the mentor
-                  disabled={buttonState[match.match._id]} // Disable button once request is sent
+                  className={`btn ${
+                    buttonState[match.match.userId]
+                      ? "btn-success"
+                      : "btn-primary"
+                  }`}
+                  onClick={() => handleSendRequest(match.match.userId)}
+                  disabled={buttonState[match.match.userId] === "Sent Successfully"}
                 >
-                  {buttonState[match.match._id] || "Send Request"}
+                  {buttonState[match.match.userId] || "Send Request"}
                 </button>
               </div>
             </div>

@@ -1,11 +1,13 @@
-const { body, validationResult } = require('express-validator');
+const { body, validationResult } = require("express-validator");
 
+// Validation rules for mentorship requests
 const mentorshipRequestValidation = [
-  body('mentorId').notEmpty().withMessage('Mentor ID is required'),
-  body('menteeId').notEmpty().withMessage('Mentee ID is required'),
-  body('status').optional().isIn(['pending', 'accepted', 'declined']).withMessage('Invalid status'),
+  body("mentorId").notEmpty().withMessage("Mentor ID is required"),
+  body("menteeId").notEmpty().withMessage("Mentee ID is required"),
+  body("status").optional().isIn(["pending", "accepted", "declined"]).withMessage("Invalid status"),
 ];
 
+// Middleware to validate the request and handle errors
 const validateMentorshipRequest = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

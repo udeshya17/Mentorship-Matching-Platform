@@ -16,4 +16,13 @@ const createNotification = async (userId, message) => {
   }
 };
 
-module.exports = { createNotification };
+const getNotificationsByUserId = async (userId) => {
+  try {
+    return await Notification.find({ userId }).exec();
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    throw new Error("Failed to fetch notifications");
+  }
+};
+
+module.exports = { createNotification, getNotificationsByUserId };

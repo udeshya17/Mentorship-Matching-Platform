@@ -24,13 +24,15 @@ const getMatchingProfiles = async (userId) => {
 };
 
 const sendMentorshipRequest = async (menteeId, mentorId) => {
+  // Check if a request already exists between this mentee and mentor
   const existingRequest = await MentorshipRequest.findOne({ menteeId, mentorId });
 
   if (existingRequest) {
-    throw new Error('Request already exists');
+    throw new Error("Request already exists");
   }
 
-  const request = new MentorshipRequest({ menteeId, mentorId, status: 'pending' });
+  // Create a new mentorship request
+  const request = new MentorshipRequest({ menteeId, mentorId, status: "pending" });
   await request.save();
 
   return request;

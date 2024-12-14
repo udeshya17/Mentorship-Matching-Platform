@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Profile from "../Profile/profile";
 import UserDiscoveryPage from "../UserDiscoveryPage/UserDiscoveryPage";
 import MatchResultPage from "../MatchResultPage/MatchResultPage";
+import Notification from "../Notifications/Notifications"
 
 
 const HomePage = () => {
@@ -122,6 +123,7 @@ const HomePage = () => {
           <Profile />
           <UserDiscoveryPage />
           <MatchResultPage />
+          <Notification />
         </>
       )}
     </>

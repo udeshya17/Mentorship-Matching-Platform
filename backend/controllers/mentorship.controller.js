@@ -23,12 +23,17 @@ const getMatchSuggestions = async (req, res) => {
 const sendMentorshipRequest = async (req, res) => {
   try {
     const { menteeId, mentorId } = req.body;
+
+    // Call the service to handle the request logic
     const request = await mentorshipService.sendMentorshipRequest(menteeId, mentorId);
-    
-    // Manually log the notification
-    console.log(`Notification: You have a new mentorship request from ${menteeId}`);
-    
-    res.json(request);
+
+    // Manually log the notification (this could also be a database insertion)
+    console.log(`Notification: You have a new mentorship request from mentee ID ${menteeId}`);
+
+    res.status(201).json({
+      message: "Mentorship request sent successfully.",
+      request,
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
