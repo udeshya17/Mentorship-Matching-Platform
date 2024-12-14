@@ -61,6 +61,7 @@ const MatchResultsPage = () => {
       );
 
       if (response.status === 201 || response.status === 200) {
+        const requestId = response.data.requestId; // Extract requestId from the response
         enqueueSnackbar("Mentorship request sent successfully!", { variant: "success" });
 
         // Update button state to "Sent Successfully"
@@ -73,9 +74,13 @@ const MatchResultsPage = () => {
 
         // Send notification
         await axios.post(`${config.endpoint}/api/notifications`, {
+          _id: `notification-${mentorId}-${Date.now()}`, // Optional: Unique ID generation
+          message: "Mentorship request received",
+          requestId: requestId,
           userId: mentorId,
           senderId: menteeId,
-          message: `You have a new mentorship request from ${menteeId}`,
+          read: false,
+          status: null,
         });
       }
     } catch (error) {

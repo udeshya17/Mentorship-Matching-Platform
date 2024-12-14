@@ -1,20 +1,20 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const mentorshipRequestSchema = new mongoose.Schema({
   menteeId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Profile',
+    ref: "Profile",
     required: true,
   },
   mentorId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Profile',
+    ref: "Profile",
     required: true,
   },
   status: {
     type: String,
-    enum: ['pending', 'accepted', 'declined'],
-    default: 'pending',
+    enum: ["pending", "accepted", "declined"],
+    default: "pending",
   },
   createdAt: {
     type: Date,
@@ -22,4 +22,4 @@ const mentorshipRequestSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('MentorshipRequest', mentorshipRequestSchema);
+module.exports = mongoose.model("MentorshipRequest", mentorshipRequestSchema);

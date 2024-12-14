@@ -42,7 +42,7 @@ const updateMentorshipRequestStatus = async (requestId, status) => {
   const request = await MentorshipRequest.findById(requestId);
 
   if (!request) {
-    throw new Error('Request not found');
+    throw new Error("Request not found");
   }
 
   request.status = status;
@@ -51,4 +51,13 @@ const updateMentorshipRequestStatus = async (requestId, status) => {
   return request;
 };
 
-module.exports = { getMatchingProfiles, sendMentorshipRequest, updateMentorshipRequestStatus };
+const getRequestsByMentorId = async (mentorId) => {
+  try {
+    const mentorshipRequests = await MentorshipRequest.find({ mentorId }).populate('menteeId mentorId');
+    return mentorshipRequests;
+  } catch (error) {
+    throw new Error(`Error fetching mentorship requests: ${error.message}`);
+  }
+};
+
+module.exports = { getMatchingProfiles, sendMentorshipRequest, updateMentorshipRequestStatus, getRequestsByMentorId };

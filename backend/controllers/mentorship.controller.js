@@ -43,16 +43,37 @@ const sendMentorshipRequest = async (req, res) => {
 const updateRequestStatus = async (req, res) => {
   try {
     const { requestId, status } = req.body;
+
+    // Update the mentorship request status in the database
     const updatedRequest = await mentorshipService.updateMentorshipRequestStatus(requestId, status);
 
     // Notify the mentee
-    const message = status === 'accepted' ? 'Your mentorship request was accepted' : 'Your mentorship request was declined';
-    await notificationService.createNotification(updatedRequest.menteeId, message);
+    const message =
+      status === "accepted"
+        ? "Your mentorship request was accepted"
+        : "Your mentorship request was declined";
+    await notificationService.createNotification(updatedRequest.menteeId, message, requestId);
 
-    res.json(updatedRequest);
+    res.status(200).json(updatedRequest);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
 
-module.exports = { getMatchSuggestions, sendMentorshipRequest, updateRequestStatus };
+const getMentorshipRequestsByMentor = async (req, res) => {
+  try {
+    const mentorId = req.params.userid;
+    const mentorshipRequests = await mentorshipService.getRequestsByMentorId(mentorId);
+
+    if (!mentorshipRequests.length) {
+      return res.status(404).json({ message: "No mentorship requests found for this mentor." });
+    }
+
+    res.status(200).json(mentorshipRequests);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+module.exports = { getMatchSuggestions, sendMentorshipRequest, updateRequestStatus, getMentorshipRequestsByMentor };
