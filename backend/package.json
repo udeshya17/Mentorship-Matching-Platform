@@ -4,8 +4,7 @@
   "description": "In this application users can create an account, set up a profile as a mentor or mentee, specify their skills or areas of interest,and find matches with others for mentorship opportunities.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "nodemon backend/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
