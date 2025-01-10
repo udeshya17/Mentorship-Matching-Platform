@@ -10,17 +10,20 @@ const notificationRoutes = require("./routes/notification.routes");
 const app = express();
 const PORT = process.env.PORT;
 
-// cors policy error handling
+// Updated CORS configuration
 app.use(
-    cors({
-      origin: [
-        "http://localhost:5173", // Frontend origin
-        "http://localhost:8082", // Backend origin (if needed, though usually not required)
-      ],
-      optionsSuccessStatus: 200,
-      credentials: true, 
-    })
-  );
+  cors({
+    origin: [
+      "http://localhost:5173", // Local frontend origin for development
+      "https://mentorship-gamma.vercel.app", // Deployed frontend origin
+      "https://mentorship-matching-platform-wrri.onrender.com", // Backend origin
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+    credentials: true, // Allow credentials like cookies, authorization headers
+    optionsSuccessStatus: 200, // For legacy browsers
+  })
+);
 
 connectDB();
 
