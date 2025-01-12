@@ -13,11 +13,7 @@ const PORT = process.env.PORT;
 // Updated CORS configuration
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173", // Local frontend origin for development
-      "https://mentorship-gamma.vercel.app", // Deployed frontend origin
-      "https://mentorship-matching-platform-wrri.onrender.com", // Backend origin
-    ],
+    origin: true, // Allow all origins
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
     credentials: true, // Allow credentials like cookies, authorization headers
