@@ -13,11 +13,9 @@ const PORT = process.env.PORT;
 // Updated CORS configuration
 app.use(
   cors({
-    origin: true, // Allow all origins
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed HTTP methods
-    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
-    credentials: true, // Allow credentials like cookies, authorization headers
-    optionsSuccessStatus: 200, // For legacy browsers
+    origin: "*", // Allow requests from any origin
+    optionsSuccessStatus: 200,
+    credentials: true, // This won't work with `*`, so remove if using this.
   })
 );
 
