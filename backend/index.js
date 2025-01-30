@@ -13,9 +13,9 @@ const PORT = process.env.PORT;
 // Updated CORS configuration
 app.use(
   cors({
-    origin: "*", // Allow requests from any origin
+    origin: "*", 
     optionsSuccessStatus: 200,
-    credentials: true, // This won't work with `*`, so remove if using this.
+    credentials: true,  
   })
 );
 
