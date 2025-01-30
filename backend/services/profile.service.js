@@ -7,7 +7,7 @@ const getProfileByUserId = async (userId) => {
 
 // Create a new profile
 const createProfile = async (profileData) => {
-  const { userId, role, skills, interests, bio } = profileData;
+  const { userId, name, role, skills, interests, bio } = profileData;
 
   // Check if a profile already exists
   const existingProfile = await Profile.findOne({ userId });
@@ -16,7 +16,7 @@ const createProfile = async (profileData) => {
   }
 
   // Create and save the new profile
-  const profile = new Profile({ userId, role, skills, interests, bio });
+  const profile = new Profile({ userId, name, role, skills, interests, bio });
   return await profile.save();
 };
 
